@@ -1,10 +1,15 @@
+# Local secrets and variables
 .dev.vars
 .dev.vars.*
 !.dev.vars.example
 .env
 .env.*
+
+# Local wrangler config and state
 .wrangler/
-node_modules/
 wrangler.toml
 wrangler.json
 wrangler.jsonc
+
+# Dependencies
+node_modules/

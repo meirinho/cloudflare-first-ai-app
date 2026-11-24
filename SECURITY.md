@@ -1,29 +1,29 @@
-# Segurança
+# Security
 
-Este app é pequeno de propósito, mas segue os mesmos princípios de um app de IA em produção. Este documento explica os princípios, não os parâmetros. Os valores reais e os detalhes de configuração ficam fora do repositório.
+This app is small on purpose, but it follows the same principles as a production AI app. This document explains the principles, not the parameters. Real values and configuration details stay out of the repository.
 
-## Princípios
+## Principles
 
-1. **Configuração fora do código.** Limites, chaves, prompt e endereço permitido vêm de variáveis e secrets do Worker. O repositório só traz exemplos.
-2. **Falha fechada.** Se faltar configuração, se a verificação anti-robô falhar ou se um contador não puder ser atualizado, o app recusa a pergunta. Ele nunca passa a funcionar sem limite.
-3. **Limite de uso em camadas.** Há limite por pessoa em janela curta, limite por pessoa por semana e um teto global diário bem abaixo da cota gratuita, para sobrar recurso para outros apps. As camadas se sobrepõem, para que a falha de uma não deixe o app aberto.
-4. **Verificação anti-robô.** Cada pergunta exige um token do Cloudflare Turnstile, validado no servidor antes de qualquer gasto. O token vale uma vez só.
-5. **Mesma origem.** A API só aceita pedidos vindos da própria página, com corpo JSON pequeno e no formato esperado.
-6. **Proteção contra prompt injection.**
-   - O system prompt fica no servidor, junto de regras fixas que nenhum texto do usuário pode mudar.
-   - A pergunta vai num campo separado, delimitado e limitado, e é tratada como dado.
-   - O histórico não vem do navegador: cada pergunta é avaliada sozinha.
-7. **Saída sempre como texto.** A resposta do modelo entra na página como texto puro, nunca como HTML. A página tem Content Security Policy restritiva com nonce, bloqueio de iframe externo e cabeçalhos de segurança.
-8. **Nenhum dado guardado.** O app não registra perguntas nem respostas. Os contadores guardam só números, sob chaves derivadas com sal secreto, e expiram sozinhos.
-9. **Mensagens educativas e genéricas.** Os erros lembram que este é um app educativo de demonstração e dizem o que a pessoa pode fazer, sem detalhar números nem como a regra funciona.
-10. **Interruptor de emergência.** Uma variável desliga o app na hora, sem mexer no código.
-11. **Custo zero.** Tudo roda no plano gratuito. Se uma cota gratuita acaba, o serviço para em vez de gerar cobrança.
+1. **Configuration outside the code.** Limits, keys, prompt and allowed address come from Worker variables and secrets. The repository only has examples.
+2. **Fail closed.** If configuration is missing, bot verification fails or a counter cannot be updated, the app refuses the question. It never starts running without limits.
+3. **Layered usage limits.** There is a short-window limit per person, a weekly limit per person and a daily global cap well below the free allocation, so there is room left for other apps. The layers overlap, so one failing does not leave the app open.
+4. **Bot verification.** Every question requires a Cloudflare Turnstile token, validated on the server before anything is spent. Each token works only once.
+5. **Same origin.** The API only accepts requests from its own page, with a small JSON body in the expected shape.
+6. **Prompt injection protection.**
+   - The system prompt lives on the server, together with fixed rules that no user text can change.
+   - The question goes in a separate, delimited and size-limited field, and is treated as data.
+   - History does not come from the browser: each question is evaluated on its own.
+7. **Output always as text.** The model's answer is inserted into the page as plain text, never as HTML. The page has a strict nonce-based Content Security Policy, blocks being framed and sends security headers.
+8. **No stored data.** The app does not log questions or answers. Counters store only numbers, under keys derived with a secret salt, and expire on their own.
+9. **Educational, generic messages.** Errors remind people this is an educational demo app and say what they can do, without revealing numbers or how a rule works.
+10. **Emergency switch.** A variable turns the app off immediately, without touching the code.
+11. **Zero cost.** Everything runs on the free plan. If a free allocation runs out, the service stops instead of generating charges.
 
-## Limitações conhecidas
+## Known limitations
 
-- Contadores distribuídos são aproximados por natureza. Por isso há várias camadas e um teto global com folga.
-- Nenhuma defesa contra prompt injection é perfeita. As regras reduzem o risco, e a saída como texto impede que uma resposta manipulada vire código na página.
+- Distributed counters are approximate by nature. That is why there are several layers and a global cap with headroom.
+- No defense against prompt injection is perfect. The rules reduce the risk, and rendering output as text keeps a manipulated answer from becoming code on the page.
 
-## Como relatar um problema
+## Reporting a problem
 
-Encontrou uma falha? Não abra issue pública. Use o recurso de relato privado de vulnerabilidade do GitHub neste repositório (aba Security), se estiver ativo, ou fale com o mantenedor por um canal privado.
+Found a vulnerability? Please do not open a public issue. Use GitHub's private vulnerability reporting in this repository (Security tab), if enabled, or contact the maintainer through a private channel.

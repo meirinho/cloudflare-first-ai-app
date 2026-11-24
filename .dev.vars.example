@@ -1,30 +1,30 @@
-# Copie para .dev.vars (que o .gitignore protege) e troque pelos seus valores.
-# Todos os números abaixo são EXEMPLOS para desenvolvimento local, não recomendações.
-# Em produção, cada item vira uma variável ou um secret no painel do Worker.
+# Copy to .dev.vars (protected by .gitignore) and replace with your own values.
+# All numbers below are EXAMPLES for local development, not recommendations.
+# In production, each item becomes a variable or a secret in the Worker dashboard.
 
-# Limites (texto)
-LIMITE_POR_MINUTO=3
-LIMITE_POR_SEMANA_IP=5
-TETO_PERGUNTAS_DIA=20
-TETO_NEURONIOS_DIA=400
+# Limits (text)
+RATE_LIMIT_PER_MINUTE=3
+WEEKLY_LIMIT_PER_IP=5
+DAILY_QUESTION_CAP=20
+DAILY_NEURON_CAP=400
 MAX_TOKENS=128
-MAX_CARACTERES=200
+MAX_INPUT_CHARS=200
 
-# Origem permitida (texto): o endereço exato da página, sem barra no fim.
+# Allowed origin (text): the exact address of the page, no trailing slash.
 ALLOWED_ORIGIN=http://localhost:8787
 
-# Turnstile: chaves de TESTE públicas da documentação da Cloudflare (sempre passam).
+# Turnstile: public TEST keys from the Cloudflare documentation (they always pass).
 TURNSTILE_SITE_KEY=1x00000000000000000000AA
 TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
 
-# Secret: texto aleatório longo (mínimo 16 caracteres). Gere um seu.
-SAL_HASH=troque-por-um-texto-aleatorio-longo
+# Secret: long random text (at least 16 characters). Generate your own.
+HASH_SALT=replace-with-a-long-random-string
 
-# Secret (opcional): system prompt real. Sem ele, o app usa um exemplo genérico.
-SYSTEM_PROMPT=Você é o assistente de um app educativo de teste. Responda só sobre o tema do app.
+# Secret (optional): the real system prompt. Without it, the app uses a generic example.
+SYSTEM_PROMPT=You are the assistant of an educational test app. Only answer about the app's topic.
 
-# Interruptor de emergência: 1 desliga o app.
-APP_DESLIGADO=0
+# Emergency switch: 1 turns the app off.
+APP_DISABLED=0
 
-# Opcional: id de um AI Gateway seu.
+# Optional: ID of your own AI Gateway.
 # AI_GATEWAY_ID=

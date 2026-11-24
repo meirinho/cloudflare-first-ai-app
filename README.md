@@ -1,76 +1,79 @@
-# App educativo de IA na Cloudflare (plano gratuito)
+# Educational AI app on Cloudflare (free plan)
 
-Criado por [Adriano Meirinho](https://meirinho.com.br) · Licença MIT
+By [Adriano Meirinho](https://meirinho.com.br) · MIT License · [Leia em português](README.pt-BR.md)
 
-Um chat mínimo num Worker só: uma página e uma rota `/api/chat` que chama um modelo do Workers AI. O código cabe no editor do painel da Cloudflare e não tem build nem dependências.
+A minimal chat in a single Worker: one page and one `/api/chat` route that calls a Workers AI model. The code fits in the Cloudflare dashboard editor and has no build step and no dependencies.
 
-O objetivo é didático: mostrar um app de IA pequeno feito do jeito certo, com limite de uso, verificação anti-robô, proteção contra prompt injection e nenhum dado guardado. Os princípios estão em [SECURITY.md](SECURITY.md) e o passo a passo para ensinar está em [SKILL.md](SKILL.md).
+The goal is educational: show a small AI app done the right way, with usage limits, bot verification, prompt injection protection and no stored data. The principles are in [SECURITY.md](SECURITY.md) and the teaching walkthrough is in [SKILL.md](SKILL.md).
 
-## O que tem aqui
+The code and docs are in English. The text the app shows on screen is in Brazilian Portuguese, because the audience is Brazilian.
 
-| Arquivo | Para quê |
+## What is in here
+
+| File | Purpose |
 | --- | --- |
-| `src/worker.js` | O Worker inteiro (página + API). É este arquivo que você cola no painel. |
-| `.dev.vars.example` | Modelo das variáveis, com valores de exemplo. |
-| `wrangler.toml.example` | Modelo para quem publica com wrangler. |
-| `SECURITY.md` | Princípios de segurança e como relatar um problema. |
-| `SKILL.md` | O padrão em formato de skill e o roteiro «como ensinar no filme». |
-| `LICENSE` | Licença MIT. |
+| `src/worker.js` | The whole Worker (page + API). This is the file you paste into the dashboard. |
+| `.dev.vars.example` | Template for the variables, with example values. |
+| `wrangler.toml.example` | Template for those who deploy with wrangler. |
+| `SECURITY.md` | Security principles and how to report a problem. |
+| `SKILL.md` | The pattern as a skill and the «How to teach it on video» script. |
+| `README.pt-BR.md` | This README in Portuguese. |
+| `LICENSE` | MIT License. |
 
-## Antes de começar
+## Before you start
 
-- Uma conta Cloudflare no plano Workers Free. Nada aqui exige plano pago.
-- Toda configuração real (limites, chaves, prompt e endereço) fica em variáveis e secrets do Worker, nunca no código nem no repositório.
-- Se faltar alguma configuração obrigatória, o app recusa as perguntas. Ele nunca funciona sem limite.
+- A Cloudflare account on the Workers Free plan. Nothing here requires a paid plan.
+- All real configuration (limits, keys, prompt and address) lives in Worker variables and secrets, never in the code or in the repository.
+- If any required setting is missing, the app refuses questions. It never runs without limits.
 
-## Configuração
+## Configuration
 
-| Nome | Tipo no painel | Obrigatório | O que é |
+| Name | Type in the dashboard | Required | What it is |
 | --- | --- | --- | --- |
-| `AI` | Binding Workers AI | sim | Acesso ao modelo. |
-| `ESTADO` | Binding KV namespace | sim | Contadores efêmeros, que expiram sozinhos. |
-| `LIMITADOR` | Binding Rate Limiting | não | Camada extra, só configurável com wrangler. |
-| `LIMITE_POR_MINUTO` | Texto | sim | Perguntas por pessoa por minuto (proteção curta). |
-| `LIMITE_POR_SEMANA_IP` | Texto | sim | Perguntas por pessoa por semana. |
-| `TETO_PERGUNTAS_DIA` | Texto | sim | Teto global de perguntas por dia. |
-| `TETO_NEURONIOS_DIA` | Texto | sim | Teto global estimado em neurônios por dia. |
-| `MAX_TOKENS` | Texto | sim | Tamanho máximo da resposta. |
-| `MAX_CARACTERES` | Texto | sim | Tamanho máximo da pergunta. |
-| `ALLOWED_ORIGIN` | Texto | sim | Endereço exato da página, por exemplo `https://seu-app.sua-conta.workers.dev`. |
-| `TURNSTILE_SITE_KEY` | Texto | sim | Chave pública do widget Turnstile. |
-| `TURNSTILE_SECRET_KEY` | Secret | sim | Chave secreta do widget Turnstile. |
-| `SAL_HASH` | Secret | sim | Texto aleatório longo, usado para não guardar identificadores em claro. |
-| `SYSTEM_PROMPT` | Secret | não | O prompt real. Sem ele, vale um exemplo genérico. |
-| `APP_DESLIGADO` | Texto | não | `1` desliga o app na hora. |
-| `AI_GATEWAY_ID` | Texto | não | Id de um AI Gateway seu, para mais uma camada de limite. |
+| `AI` | Workers AI binding | yes | Access to the model. |
+| `STATE` | KV namespace binding | yes | Short-lived counters that expire on their own. |
+| `RATE_LIMITER` | Rate Limiting binding | no | Extra layer, only configurable with wrangler. |
+| `RATE_LIMIT_PER_MINUTE` | Text | yes | Questions per person per minute (short-term protection). |
+| `WEEKLY_LIMIT_PER_IP` | Text | yes | Questions per person per week. |
+| `DAILY_QUESTION_CAP` | Text | yes | Global cap on questions per day. |
+| `DAILY_NEURON_CAP` | Text | yes | Global cap on estimated neurons per day. |
+| `MAX_TOKENS` | Text | yes | Maximum answer length. |
+| `MAX_INPUT_CHARS` | Text | yes | Maximum question length. |
+| `ALLOWED_ORIGIN` | Text | yes | Exact address of the page, for example `https://your-app.your-account.workers.dev`. |
+| `TURNSTILE_SITE_KEY` | Text | yes | Public key of the Turnstile widget. |
+| `TURNSTILE_SECRET_KEY` | Secret | yes | Secret key of the Turnstile widget. |
+| `HASH_SALT` | Secret | yes | Long random text, used so identifiers are never stored in the clear. |
+| `SYSTEM_PROMPT` | Secret | no | The real prompt. Without it, a generic example is used. |
+| `APP_DISABLED` | Text | no | `1` turns the app off immediately. |
+| `AI_GATEWAY_ID` | Text | no | ID of your own AI Gateway, for one more limit layer. |
 
-Escolha os números pensando na cota gratuita do Workers AI (10 mil neurônios por dia) e no preço do modelo em neurônios, publicado na [página de preços](https://developers.cloudflare.com/workers-ai/platform/pricing/). Deixe uma folga grande, ainda mais se a mesma conta tiver outros apps usando Workers AI: a cota é da conta inteira.
+Pick the numbers with the Workers AI free allocation (10,000 neurons per day) and the model's price in neurons in mind, as published on the [pricing page](https://developers.cloudflare.com/workers-ai/platform/pricing/). Leave plenty of headroom, especially if other apps in the same account use Workers AI: the allocation is shared by the whole account.
 
-## Publicar pelo painel (sem Git)
+## Deploy from the dashboard (no Git)
 
-Os caminhos abaixo seguem a documentação oficial da Cloudflare.
+The paths below follow the official Cloudflare documentation.
 
-1. **KV.** Em **Workers KV**, selecione **Create instance**, dê um nome e selecione **Create** ([doc](https://developers.cloudflare.com/kv/get-started/)).
-2. **Binding do KV.** No seu Worker, abra a aba **Bindings**, selecione **Add binding** > **KV namespace**, use o nome de variável `ESTADO`, escolha o namespace e selecione **Add binding**.
-3. **Binding do Workers AI**, se ainda não existir: em **Bindings**, adicione um binding de Workers AI com o nome `AI`.
-4. **Turnstile.** Na página **Turnstile**, selecione **Add widget**, informe o nome, a região, o hostname exato do seu Worker e o modo **Managed**, e selecione **Create**. Copie a sitekey. A secret key vai direto para o passo 5, sem passar por chat, e-mail nem arquivo ([doc](https://developers.cloudflare.com/turnstile/get-started/widget-management/dashboard/)).
-5. **Variáveis e secrets.** No Worker, em **Settings** > **Variables and Secrets** > **Add**, crie cada item da tabela acima com o tipo certo (Texto ou Secret) e selecione **Deploy** ([variáveis](https://developers.cloudflare.com/workers/configuration/environment-variables/), [secrets](https://developers.cloudflare.com/workers/configuration/secrets/)).
-6. **Código.** Selecione **Edit Code**, troque todo o conteúdo pelo de `src/worker.js` e publique com **Deploy**.
+1. **KV.** In **Workers KV**, select **Create instance**, give it a name and select **Create** ([docs](https://developers.cloudflare.com/kv/get-started/)).
+2. **KV binding.** In your Worker, open the **Bindings** tab, select **Add binding** > **KV namespace**, use the variable name `STATE`, pick the namespace and select **Add binding**.
+3. **Workers AI binding**, if it does not exist yet: in **Bindings**, add a Workers AI binding named `AI`.
+4. **Turnstile.** On the **Turnstile** page, select **Add widget**, enter the name, the region, your Worker's exact hostname and the **Managed** mode, and select **Create**. Copy the sitekey. The secret key goes straight to step 5, never through chat, email or a file ([docs](https://developers.cloudflare.com/turnstile/get-started/widget-management/dashboard/)).
+5. **Variables and secrets.** In the Worker, under **Settings** > **Variables and Secrets** > **Add**, create each item from the table above with the right type (Text or Secret) and select **Deploy** ([variables](https://developers.cloudflare.com/workers/configuration/environment-variables/), [secrets](https://developers.cloudflare.com/workers/configuration/secrets/)).
+6. **Code.** Select **Edit Code**, replace all the content with `src/worker.js` and publish with **Deploy**.
 
-## Publicar com wrangler
+## Deploy with wrangler
 
-1. Copie `wrangler.toml.example` para `wrangler.toml` e preencha o id do namespace KV. O `.gitignore` já deixa esse arquivo fora do Git.
-2. Crie os secrets com `npx wrangler secret put NOME` (o valor é digitado e não aparece na tela).
-3. Crie as variáveis de texto pelo painel. O `keep_vars = true` do exemplo faz o wrangler mantê-las.
-4. Publique com `npx wrangler deploy`.
+1. Copy `wrangler.toml.example` to `wrangler.toml` and fill in the KV namespace ID. The `.gitignore` already keeps that file out of Git.
+2. Create the secrets with `npx wrangler secret put NAME` (you type the value and it is not shown).
+3. Create the text variables in the dashboard. The example's `keep_vars = true` makes wrangler keep them.
+4. Deploy with `npx wrangler deploy`.
 
-Para testar na sua máquina, copie `.dev.vars.example` para `.dev.vars` e rode `npx wrangler dev`. As chaves de teste do Turnstile da documentação sempre passam, mas o hostname que elas devolvem pode não bater com `ALLOWED_ORIGIN`. Nesse caso, crie um widget de teste com o hostname `localhost`.
+To test on your machine, copy `.dev.vars.example` to `.dev.vars` and run `npx wrangler dev`. The Turnstile test keys from the documentation always pass, but the hostname they return may not match `ALLOWED_ORIGIN`. In that case, create a test widget with the hostname `localhost`.
 
-## Desligar em emergência
+## Emergency shutdown
 
-- Crie ou mude a variável `APP_DESLIGADO` para `1` e selecione **Deploy**. O app passa a responder «fora do ar» em todas as rotas.
-- Ou, em **Settings** > **Domains & Routes**, desative o endereço `workers.dev` do Worker ([doc](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/)). Isso não desativa as URLs de prévia de versões.
+- Create or change the `APP_DISABLED` variable to `1` and select **Deploy**. The app then answers «O app está fora do ar no momento.» (out of service) on every route.
+- Or, under **Settings** > **Domains & Routes**, disable the Worker's `workers.dev` address ([docs](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/)). This does not disable version preview URLs.
 
-## Licença
+## License
 
-Este repositório usa a licença MIT. Veja [LICENSE](LICENSE).
+This repository uses the MIT License. See [LICENSE](LICENSE).

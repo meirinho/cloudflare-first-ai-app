@@ -1,29 +1,29 @@
-# Exemplo para quem publica com wrangler. Copie para wrangler.toml (fora do Git) e preencha.
-# Os valores reais dos limites NÃO ficam aqui: use o painel ou `wrangler secret put`.
+# Example for those who deploy with wrangler. Copy to wrangler.toml (kept out of Git) and fill it in.
+# The real limit values do NOT go here: use the dashboard or `wrangler secret put`.
 
-name = "nome-do-seu-worker"
+name = "your-worker-name"
 main = "src/worker.js"
 compatibility_date = "2026-08-01"
 
-# Mantém as variáveis criadas no painel quando você publica com wrangler.
+# Keeps the variables created in the dashboard when you deploy with wrangler.
 keep_vars = true
 
 [ai]
 binding = "AI"
 
 [[kv_namespaces]]
-binding = "ESTADO"
-id = "<ID_DO_SEU_NAMESPACE_KV>"
+binding = "STATE"
+id = "<YOUR_KV_NAMESPACE_ID>"
 
-# Opcional: binding de Rate Limiting (só configurável por arquivo de configuração).
-# namespace_id é um inteiro, em texto, único na sua conta. Os números abaixo são exemplos.
+# Optional: Rate Limiting binding (only configurable through the config file).
+# namespace_id is an integer, as a string, unique in your account. The numbers below are examples.
 [[ratelimits]]
-name = "LIMITADOR"
-namespace_id = "<INTEIRO_UNICO_NA_CONTA>"
+name = "RATE_LIMITER"
+namespace_id = "<UNIQUE_INTEGER_IN_YOUR_ACCOUNT>"
   [ratelimits.simple]
   limit = 10
   period = 60
 
-# Sem logs guardados pela plataforma (o código já não registra nada).
+# No logs stored by the platform (the code itself logs nothing).
 [observability]
 enabled = false
