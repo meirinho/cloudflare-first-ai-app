@@ -1,5 +1,7 @@
 # App educativo de IA na Cloudflare (plano gratuito)
 
+Criado por [Adriano Meirinho](https://meirinho.com.br) · Licença MIT
+
 Um chat mínimo num Worker só: uma página e uma rota `/api/chat` que chama um modelo do Workers AI. O código cabe no editor do painel da Cloudflare e não tem build nem dependências.
 
 O objetivo é didático: mostrar um app de IA pequeno feito do jeito certo, com limite de uso, verificação anti-robô, proteção contra prompt injection e nenhum dado guardado. Os princípios estão em [SECURITY.md](SECURITY.md) e o passo a passo para ensinar está em [SKILL.md](SKILL.md).

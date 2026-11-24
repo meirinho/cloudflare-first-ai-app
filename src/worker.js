@@ -1,3 +1,9 @@
+/*
+ * Primeiro app de IA na Cloudflare (plano gratuito)
+ * Autor: Adriano Meirinho — https://meirinho.com.br
+ * Licença: MIT (veja LICENSE)
+ */
+
 // App educativo de IA num Worker só: página de chat + rota /api/chat.
 // Feito para colar no editor do painel da Cloudflare (sem build, sem dependências).
 //
