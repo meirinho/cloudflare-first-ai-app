@@ -304,13 +304,19 @@ async function chat(request, env, cfg) {
         ],
         max_tokens: cfg.maxTokens,
         temperature: 0.3,
+        // Gemma 4 thinks before answering by default; thinking would eat the token budget.
+        chat_template_kwargs: { enable_thinking: false },
       },
       options,
     );
     const answer = extractText(output).trim();
-    if (!answer) return fail(502, MSG.failed);
+    if (!answer) {
+      console.error("empty answer", JSON.stringify(output?.choices?.[0]?.finish_reason ?? null));
+      return fail(502, MSG.failed);
+    }
     return json({ answer: answer.slice(0, 8000) });
-  } catch {
+  } catch (err) {
+    console.error("model error", String(err?.message || err).slice(0, 300));
     return fail(503, MSG.failed);
   }
 }
