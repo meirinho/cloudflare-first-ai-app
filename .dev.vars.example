@@ -1,0 +1,30 @@
+# Copie para .dev.vars (que o .gitignore protege) e troque pelos seus valores.
+# Todos os números abaixo são EXEMPLOS para desenvolvimento local, não recomendações.
+# Em produção, cada item vira uma variável ou um secret no painel do Worker.
+
+# Limites (texto)
+LIMITE_POR_MINUTO=3
+LIMITE_POR_SEMANA_IP=5
+TETO_PERGUNTAS_DIA=20
+TETO_NEURONIOS_DIA=400
+MAX_TOKENS=128
+MAX_CARACTERES=200
+
+# Origem permitida (texto): o endereço exato da página, sem barra no fim.
+ALLOWED_ORIGIN=http://localhost:8787
+
+# Turnstile: chaves de TESTE públicas da documentação da Cloudflare (sempre passam).
+TURNSTILE_SITE_KEY=1x00000000000000000000AA
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+
+# Secret: texto aleatório longo (mínimo 16 caracteres). Gere um seu.
+SAL_HASH=troque-por-um-texto-aleatorio-longo
+
+# Secret (opcional): system prompt real. Sem ele, o app usa um exemplo genérico.
+SYSTEM_PROMPT=Você é o assistente de um app educativo de teste. Responda só sobre o tema do app.
+
+# Interruptor de emergência: 1 desliga o app.
+APP_DESLIGADO=0
+
+# Opcional: id de um AI Gateway seu.
+# AI_GATEWAY_ID=

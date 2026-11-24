@@ -1,0 +1,29 @@
+# Exemplo para quem publica com wrangler. Copie para wrangler.toml (fora do Git) e preencha.
+# Os valores reais dos limites NÃO ficam aqui: use o painel ou `wrangler secret put`.
+
+name = "nome-do-seu-worker"
+main = "src/worker.js"
+compatibility_date = "2026-08-01"
+
+# Mantém as variáveis criadas no painel quando você publica com wrangler.
+keep_vars = true
+
+[ai]
+binding = "AI"
+
+[[kv_namespaces]]
+binding = "ESTADO"
+id = "<ID_DO_SEU_NAMESPACE_KV>"
+
+# Opcional: binding de Rate Limiting (só configurável por arquivo de configuração).
+# namespace_id é um inteiro, em texto, único na sua conta. Os números abaixo são exemplos.
+[[ratelimits]]
+name = "LIMITADOR"
+namespace_id = "<INTEIRO_UNICO_NA_CONTA>"
+  [ratelimits.simple]
+  limit = 10
+  period = 60
+
+# Sem logs guardados pela plataforma (o código já não registra nada).
+[observability]
+enabled = false
