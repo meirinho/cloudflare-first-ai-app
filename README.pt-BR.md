@@ -2,8 +2,9 @@
 
 Criado por [Adriano Meirinho](https://meirinho.com.br) · Licença MIT · [Read in English](README.md)
 
-Um chat mínimo num Worker só: uma página e uma rota `/api/chat` que chama um modelo do Workers AI. O código cabe no editor do painel da Cloudflare e não tem build nem dependências.
+![Capa em fundo grafite com borda cinza de 2 px, o título «App de IA no plano gratuito da Cloudflare» à esquerda, a assinatura Adriano Meirinho no alto, o selo m no canto inferior esquerdo, a marca C v2 no canto inferior direito, a barra lima na base e um botão de play à direita.](docs/video-cover.jpg)
 
+Um chat mínimo num Worker só: uma página e uma rota `/api/chat` que chama um modelo do Workers AI. O código cabe no editor do painel da Cloudflare e não tem build nem dependências.
 O objetivo é didático: mostrar um app de IA pequeno feito do jeito certo, com limite de uso, verificação anti-robô, proteção contra prompt injection e nenhum dado guardado. Os princípios estão em [SECURITY.md](SECURITY.md) e o passo a passo para ensinar está em [SKILL.md](SKILL.md), ambos em inglês.
 
 O código e a documentação estão em inglês. Os textos que o app mostra na tela estão em português do Brasil, porque o público é brasileiro.

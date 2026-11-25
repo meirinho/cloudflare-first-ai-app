@@ -2,8 +2,9 @@
 
 By [Adriano Meirinho](https://meirinho.com.br) · MIT License · [Leia em português](README.pt-BR.md)
 
-A minimal chat in a single Worker: one page and one `/api/chat` route that calls a Workers AI model. The code fits in the Cloudflare dashboard editor and has no build step and no dependencies.
+![Cover on a graphite background with a 2-pixel gray border, the title “App de IA no plano gratuito da Cloudflare” on the left, the name Adriano Meirinho at the top, an m seal in the lower-left corner, the C v2 mark in the lower-right corner, a lime bar along the bottom, and a play button on the right.](docs/video-cover.jpg)
 
+A minimal chat in a single Worker: one page and one `/api/chat` route that calls a Workers AI model. The code fits in the Cloudflare dashboard editor and has no build step and no dependencies.
 The goal is educational: show a small AI app done the right way, with usage limits, bot verification, prompt injection protection and no stored data. The principles are in [SECURITY.md](SECURITY.md) and the teaching walkthrough is in [SKILL.md](SKILL.md).
 
 The code and docs are in English. The text the app shows on screen is in Brazilian Portuguese, because the audience is Brazilian.
